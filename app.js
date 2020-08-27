@@ -82,19 +82,31 @@ const {Dinos} = dinoData;
 function dinoFactory(obj){
     const methods = {
         eat(){
-            return obj.diet === 'herbavor' ? 'I like rice' : 'I like meat';
+            return obj.diet === 'herbavor' ? 'I like rice' : 'I like human meat';
         },
         isFat(){
             return obj.weight;
         },
-        sayName(){
+        greet(){
             return `I'm ${obj.species}`;
         }
     }
     if (obj.species === 'Pigeon') {
         methods.fact = 'All birds are Dinosaurs.';
     }
-    return Object.assign(obj, methods);
+    if (obj.species === 'human') {
+        obj.where = 'everywhere';
+        obj.when = 'from 6th day';
+        obj.fact = null;
+    }
+    const mixed = Object.assign(obj, methods);
+
+    return {
+        getHeight: () => mixed.weight,
+        getWeight: () => mixed.height,
+        getFact: () => mixed.fact,
+        eat: () => mixed.eat(),
+    }
 }
 
 const dinoArray = Dinos.map(dinoFactory);
