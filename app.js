@@ -111,7 +111,24 @@ function dinoFactory(obj){
 
 const dinoArray = Dinos.map(dinoFactory);
 
+document.getElementById('btn').addEventListener('click', ()=> {
+    let name = document.getElementById('name').value;
+    let feet = document.getElementById('feet').value;
+    let inches = document.getElementById('inches').value;
+    let weight = document.getElementById('weight').value;
+    let diet = document.getElementById('diet').value;
+    let height = feet * 12 + inches;  // height in inches
 
+    if( !name || (!feet && !inches)|| !weight) return;
+    const humanData = {
+        species: 'human',
+        name: name,
+        weight: weight,
+        height: height,
+        diet: diet
+    }
+    const human = dinoFactory(humanData);
+})
     // Create Human Object
 
     // Use IIFE to get human data from form
