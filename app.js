@@ -79,37 +79,48 @@ const dinoData = {
 
 const {Dinos} = dinoData;
 
-function dinoFactory(obj){
+function dinoFactory(dino, human){
     const methods = {
         eat(){
-            return obj.diet === 'herbavor' ? 'I like rice' : 'I like human meat';
+            // return [human.diet, human.weight, human.height]
+            if (human.diet !== 'Herbavor') {
+                return dino.diet ==='carnivor' ? 'We can eat each other' : 'Don\'t eat me!';
+            }
+            return dino.diet ==='carnivor' ? 'I will eat you' : 'I am a vegetarian too';
         },
-        isFat(){
-            return obj.weight;
+        howFat(){
+            if (dino.weight > human.weight) {
+                return `I'm ${(dino.weight/human.weight).toFixed(2)} times heavier than you`;
+            }else if (dino.weight < human.weight) {
+                return `I'm ${(human.weight/dino.weight).toFixed(2)} times lighter than you`;
+            }
+            return 'We have the same weight!';
         },
-        greet(){
-            return `I'm ${obj.species}`;
+        howTall(){
+            if (dino.height > human.height) {
+                return `I'm ${(dino.height/human.height).toFixed(2)} times taller than you`;
+            }else if (dino.height < human.height) {
+                return `You are ${(human.height/dino.height).toFixed(2)} times taller than me`;
+            }
+            return 'We have the same weight!';
         }
     }
-    if (obj.species === 'Pigeon') {
-        methods.fact = 'All birds are Dinosaurs.';
+    if (dino.species === 'Pigeon') {
+        dino.fact = 'All birds are Dinosaurs.';
     }
-    if (obj.species === 'human') {
-        obj.where = 'everywhere';
-        obj.when = 'from 6th day';
-        obj.fact = null;
-    }
-    const mixed = Object.assign(obj, methods);
-
+    
+    const mixed = Object.assign(dino, methods);
     return {
         getHeight: () => mixed.weight,
         getWeight: () => mixed.height,
         getFact: () => mixed.fact,
         eat: () => mixed.eat(),
+        howFat: () => mixed.howFat(),
+        howTall: () => mixed.howTall(),
     }
 }
 
-const dinoArray = Dinos.map(dinoFactory);
+let compared = [];
 
 document.getElementById('btn').addEventListener('click', ()=> {
     let name = document.getElementById('name').value;
@@ -127,9 +138,12 @@ document.getElementById('btn').addEventListener('click', ()=> {
         height: height,
         diet: diet
     }
-    const human = dinoFactory(humanData);
+    // const human = dinoFactory(humanData);
+    for(const dino of Dinos){
+        compared.push(dinoFactory(dino, humanData));
+    }
 })
-    // Create Human Object
+    // Create Human object
 
     // Use IIFE to get human data from form
 
