@@ -27,7 +27,7 @@
             <input id="name" class="form-field__full" type="text" name="name" required>
             <p>Height</p>
             <label>Feet: <input id="feet" class="form-field__short" type="number" name="feet" required min="0"></label>
-            <label>inches: <input id="inches" class="form-field__short" type="number" name="inches"  min="0"></label>
+            <label>inches: <input id="inches" class="form-field__short" type="number" name="inches"  min="0" max="12"></label>
             <p>Weight:</p>
             <label><input id="weight" class="form-field__full" type="number" name="weight" required min="1">lbs</label>
             <p>Diet:</p>
@@ -36,7 +36,7 @@
                 <option>Omnivor</option>
                 <option>Carnivor</option>
             </select>
-            <button id="btn">Compare Me!</button>
+            <div id="btn">Compare Me!</div>
         </div>
     </form>
     <!-- .grid to attach tiles to -->
