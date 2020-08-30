@@ -82,7 +82,6 @@ const {Dinos} = dinoData;
 function dinoFactory(dino, human){
     const methods = {
         eat(){
-            // return [human.diet, human.weight, human.height]
             if (human.diet !== 'Herbavor') {
                 return dino.diet ==='carnivor' ? 'We can eat each other' : 'Don\'t eat me!';
             }
@@ -105,18 +104,28 @@ function dinoFactory(dino, human){
             return 'We have the same weight!';
         }
     }
-    if (dino.species === 'Pigeon') {
-        dino.fact = 'All birds are Dinosaurs.';
-    }
-    
-    const mixed = Object.assign(dino, methods);
-    return {
-        random: [
 
-        ],
+    // random props except species
+    let randomProps = shuffle(Object.keys(dino));
+    if (randomProps.indexOf('species') !== -1) {
+        randomProps.splice(randomProps.indexOf('species'), 1);
+    }
+    randomProps = randomProps.slice(0,3);
+
+    // random facts values array
+    let randomFacts = [];
+    for(const f of randomProps){
+        randomFacts.push(`${f}: ${dino[f]}`)
+    }
+
+    const mixed = Object.assign(dino, methods);
+
+    return {
+        species: () => mixed.species,
+        random: () => randomFacts,
         eat: () => mixed.eat(),
         howFat: () => mixed.howFat(),
-        howTall: () => mixed.howTall(),
+        howTall: () => mixed.howTall()
     }
 }
 
@@ -132,7 +141,6 @@ document.getElementById('btn').addEventListener('click', ()=> {
 
     if( !name || (!feet && !inches)|| !weight) return;
     const humanData = {
-        species: 'human',
         name: name,
         weight: weight,
         height: height,
@@ -144,7 +152,18 @@ document.getElementById('btn').addEventListener('click', ()=> {
     }
 
     let dinoTiles = '';
+    for(const dino of compared){
+        console.log(dino.random())
+        // species, name, img, 3 methods
+        dinoTiles += `<div class="grid-item"><img src="images/${dino.species()}.png" alt=""><h3>${dino.species()}</h3><p>${dino.eat()}<br>${dino.howFat()}<br>${dino.howTall()}<br>`;
+        // random facts
+        for (const i of dino.random()) {
+            dinoTiles += `${i}<br>`
+        }
+        dinoTiles += '</p></div>';
+    }
 
+    document.getElementById('grid').innerHTML = dinoTiles;
 })
     
 function shuffle(arr){
