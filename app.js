@@ -111,9 +111,9 @@ function dinoFactory(dino, human){
     
     const mixed = Object.assign(dino, methods);
     return {
-        getHeight: () => mixed.weight,
-        getWeight: () => mixed.height,
-        getFact: () => mixed.fact,
+        random: [
+
+        ],
         eat: () => mixed.eat(),
         howFat: () => mixed.howFat(),
         howTall: () => mixed.howTall(),
@@ -142,11 +142,24 @@ document.getElementById('btn').addEventListener('click', ()=> {
     for(const dino of Dinos){
         compared.push(dinoFactory(dino, humanData));
     }
+
+    let dinoTiles = '';
+
 })
-    // Create Human object
+    
+function shuffle(arr){
+    let _arr = arr.slice(); // to shallow copy
+    let shuffled = [];
+    for (let i = _arr.length - 1; i >= 0; i--) {
+        let last = _arr[i];
+        let randIndex = Math.floor(Math.random() * i);
+        _arr[i] = _arr[randIndex];
+        _arr[randIndex] = last;
 
-    // Use IIFE to get human data from form
-
+        shuffled.push(_arr.pop())
+    }
+    return shuffled;
+}
 
     // Create Dino Compare Method 1
     // NOTE: Weight in JSON file is in lbs, height in inches. 
