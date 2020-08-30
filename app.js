@@ -141,29 +141,36 @@ document.getElementById('btn').addEventListener('click', ()=> {
 
     if( !name || (!feet && !inches)|| !weight) return;
     const humanData = {
+        species: 'human',
         name: name,
         weight: weight,
         height: height,
         diet: diet
     }
-    // const human = dinoFactory(humanData);
     for(const dino of Dinos){
         compared.push(dinoFactory(dino, humanData));
     }
+    compared = shuffle(compared);
+    compared.splice(4, 0, humanData) // locate human center
 
     let dinoTiles = '';
     for(const dino of compared){
-        console.log(dino.random())
-        // species, name, img, 3 methods
-        dinoTiles += `<div class="grid-item"><img src="images/${dino.species()}.png" alt=""><h3>${dino.species()}</h3><p>${dino.eat()}<br>${dino.howFat()}<br>${dino.howTall()}<br>`;
-        // random facts
-        for (const i of dino.random()) {
-            dinoTiles += `${i}<br>`
+        dinoTiles += '<div class="grid-item">';
+        if (dino.species === 'human') {
+            dinoTiles += `<img src="images/${dino.species}.png" alt=""><h3>${dino.name}</h3><p></p>`;
+        }else{
+            // species, name, img, 3 methods
+            dinoTiles += `<img src="images/${dino.species()}.png" alt=""><h3>${dino.species()}</h3><p>${dino.eat()}<br>${dino.howFat()}<br>${dino.howTall()}<br>`;
+            // random facts
+            for (const i of dino.random()) {
+                dinoTiles += `${i}<br>`
+            }
         }
         dinoTiles += '</p></div>';
     }
 
     document.getElementById('grid').innerHTML = dinoTiles;
+    document.getElementById('dino-compare').remove();
 })
     
 function shuffle(arr){
@@ -179,24 +186,3 @@ function shuffle(arr){
     }
     return shuffled;
 }
-
-    // Create Dino Compare Method 1
-    // NOTE: Weight in JSON file is in lbs, height in inches. 
-
-    
-    // Create Dino Compare Method 2
-    // NOTE: Weight in JSON file is in lbs, height in inches.
-
-    
-    // Create Dino Compare Method 3
-    // NOTE: Weight in JSON file is in lbs, height in inches.
-
-
-    // Generate Tiles for each Dino in Array
-  
-        // Add tiles to DOM
-
-    // Remove form from screen
-
-
-// On button click, prepare and display infographic
