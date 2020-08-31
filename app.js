@@ -136,7 +136,7 @@ document.getElementById('btn').addEventListener('click', ()=> {
     let inches = document.getElementById('inches').value;
     let weight = document.getElementById('weight').value;
     let diet = document.getElementById('diet').value;
-    let height = feet * 12 + inches;  // height in inches
+    let height = parseInt(feet) * 12 + parseInt(inches);  // height in inches
 
     if( !name || (!feet && !inches)|| !weight) return;
     const humanData = {
