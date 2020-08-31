@@ -88,44 +88,43 @@ function dinoFactory(dino, human){
             return dino.diet ==='carnivor' ? 'I will eat you' : 'I am a vegetarian too';
         },
         howFat(){
-            if (dino.weight > human.weight) {
-                return `I'm ${(dino.weight/human.weight).toFixed(2)} times heavier than you`;
-            }else if (dino.weight < human.weight) {
-                return `I'm ${(human.weight/dino.weight).toFixed(2)} times lighter than you`;
+            const dw = parseInt(dino.weight);
+            if (dw > human.weight) {
+                return `I'm ${(dw/human.weight).toFixed(2)} times heavier than you`;
+            }else if (dw < human.weight) {
+                return `I'm ${(human.weight/dw).toFixed(2)} times lighter than you`;
             }
             return 'We have the same weight!';
         },
         howTall(){
-            if (dino.height > human.height) {
-                return `I'm ${(dino.height/human.height).toFixed(2)} times taller than you`;
-            }else if (dino.height < human.height) {
-                return `You are ${(human.height/dino.height).toFixed(2)} times taller than me`;
+            const dh = parseInt(dino.height);
+            if (dh > human.height) {
+                return `I'm ${(dh/human.height).toFixed(2)} times taller than you`;
+            }else if (dh < human.height) {
+                return `You are ${(human.height/dh).toFixed(2)} times taller than me`;
             }
             return 'We have the same weight!';
         }
     }
 
-    // random props except species
-    let randomProps = shuffle(Object.keys(dino));
-    if (randomProps.indexOf('species') !== -1) {
-        randomProps.splice(randomProps.indexOf('species'), 1);
-    }
-    randomProps = randomProps.slice(0,3);
-
-    // random facts values array
-    let randomFacts = [];
-    for(const f of randomProps){
-        randomFacts.push(`${f}: ${dino[f]}`)
-    }
-
     const mixed = Object.assign(dino, methods);
+
+    // props except species
+    let facts = Object.keys(dino);
+    facts.splice(facts.indexOf('species'), 1);
+
+    const randomFact = () => {
+        if (mixed.species === 'Pigeon') {
+            return 'All birds are considered dinosaurs.';
+        }
+
+        const fact = facts[Math.floor(Math.random() * facts.length)];
+        return typeof mixed[fact] === 'function' ? mixed[fact]() : mixed.fact; 
+    };
 
     return {
         species: () => mixed.species,
-        random: () => randomFacts,
-        eat: () => mixed.eat(),
-        howFat: () => mixed.howFat(),
-        howTall: () => mixed.howTall()
+        fact: () => randomFact()
     }
 }
 
@@ -159,12 +158,8 @@ document.getElementById('btn').addEventListener('click', ()=> {
         if (dino.species === 'human') {
             dinoTiles += `<img src="images/${dino.species}.png" alt=""><h3>${dino.name}</h3><p></p>`;
         }else{
-            // species, name, img, 3 methods
-            dinoTiles += `<img src="images/${dino.species()}.png" alt=""><h3>${dino.species()}</h3><p>${dino.eat()}<br>${dino.howFat()}<br>${dino.howTall()}<br>`;
-            // random facts
-            for (const i of dino.random()) {
-                dinoTiles += `${i}<br>`
-            }
+            // species, name, img, fact
+            dinoTiles += `<img src="images/${dino.species()}.png" alt=""><h3>${dino.species()}</h3><p>${dino.fact()}<br>`;
         }
         dinoTiles += '</p></div>';
     }
@@ -172,7 +167,8 @@ document.getElementById('btn').addEventListener('click', ()=> {
     document.getElementById('grid').innerHTML = dinoTiles;
     document.getElementById('dino-compare').remove();
 })
-    
+
+// returns new shuffled array not mutating original arr
 function shuffle(arr){
     let _arr = arr.slice(); // to shallow copy
     let shuffled = [];
