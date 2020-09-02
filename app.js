@@ -78,39 +78,38 @@ const dinoData = {
     // Create Dino Objects
 
 const {Dinos} = dinoData;
+const methods = {
+    eat(human){
+        if (human.diet !== 'Herbavor') {
+            return this.diet ==='carnivor' ? 'We can eat each other' : 'Don\'t eat me!';
+        }
+        return this.diet ==='carnivor' ? 'I will eat you' : 'I am a vegetarian too';
+    },
+    howFat(human){
+        const dinoWeight = parseInt(this.weight);
+        if (dinoWeight > human.weight) {
+            return `I'm ${(dinoWeight/human.weight).toFixed(2)} times heavier than you`;
+        }else if (dinoWeight < human.weight) {
+            return `I'm ${(human.weight/dinoWeight).toFixed(2)} times lighter than you`;
+        }
+        return 'We have the same weight!';
+    },
+    howTall(human){
+        const dinoHeight = parseInt(this.height);
+        if (dinoHeight > human.height) {
+            return `I'm ${(dinoHeight/human.height).toFixed(2)} times taller than you`;
+        }else if (dinoHeight < human.height) {
+            return `You are ${(human.height/dinoHeight).toFixed(2)} times taller than me`;
+        }
+        return 'We have the same weight!';
+    }
+};
 
 function dinoFactory(dino, human){
-    const methods = {
-        eat(){
-            if (human.diet !== 'Herbavor') {
-                return dino.diet ==='carnivor' ? 'We can eat each other' : 'Don\'t eat me!';
-            }
-            return dino.diet ==='carnivor' ? 'I will eat you' : 'I am a vegetarian too';
-        },
-        howFat(){
-            const dw = parseInt(dino.weight);
-            if (dw > human.weight) {
-                return `I'm ${(dw/human.weight).toFixed(2)} times heavier than you`;
-            }else if (dw < human.weight) {
-                return `I'm ${(human.weight/dw).toFixed(2)} times lighter than you`;
-            }
-            return 'We have the same weight!';
-        },
-        howTall(){
-            const dh = parseInt(dino.height);
-            if (dh > human.height) {
-                return `I'm ${(dh/human.height).toFixed(2)} times taller than you`;
-            }else if (dh < human.height) {
-                return `You are ${(human.height/dh).toFixed(2)} times taller than me`;
-            }
-            return 'We have the same weight!';
-        }
-    }
-
     const mixed = Object.assign(dino, methods);
 
     // props except species
-    let facts = Object.keys(dino);
+    let facts = Object.keys(mixed);
     facts.splice(facts.indexOf('species'), 1);
 
     const randomFact = () => {
@@ -119,7 +118,7 @@ function dinoFactory(dino, human){
         }
 
         const fact = facts[Math.floor(Math.random() * facts.length)];
-        return typeof mixed[fact] === 'function' ? mixed[fact]() : mixed.fact; 
+        return typeof mixed[fact] === 'function' ? mixed[fact](human) : mixed.fact; 
     };
 
     return {
@@ -131,12 +130,12 @@ function dinoFactory(dino, human){
 let compared = [];
 
 document.getElementById('btn').addEventListener('click', ()=> {
-    let name = document.getElementById('name').value;
-    let feet = document.getElementById('feet').value;
-    let inches = document.getElementById('inches').value;
-    let weight = document.getElementById('weight').value;
-    let diet = document.getElementById('diet').value;
-    let height = parseInt(feet) * 12 + parseInt(inches);  // height in inches
+    const name = document.getElementById('name').value;
+    const feet = document.getElementById('feet').value;
+    const inches = document.getElementById('inches').value;
+    const weight = document.getElementById('weight').value;
+    const diet = document.getElementById('diet').value;
+    const height = parseInt(feet) * 12 + parseInt(inches);  // height in inches
 
     if( !name || (!feet && !inches)|| !weight) return;
     const humanData = {
